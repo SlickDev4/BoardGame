@@ -1,0 +1,2195 @@
+<CustomLabel@Label>:
+    size_hint: None, None
+    color:(0,0,0,1)
+    background_color:(1,1,1,1)
+    text_size: self.size
+    halign: 'center'
+    valign: 'middle'
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<Fields@Label>:
+    size_hint: None, None
+    size: dp(50), dp(50)
+    color:(0,0,0,1)
+    background_color: (1,1,1,1)
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<TextInputs@TextInput>:
+    text: "Input field..."
+    multiline: False
+    input_filter: 'int'
+    size_hint: None, None
+    size: dp(157), dp(30)
+
+<ActionButtons@Button>:
+    disabled: True
+    size_hint: None, None
+    size: dp(100), dp(30)
+
+<ThiefButtons@Button>:
+    disabled: True
+    size_hint: None, None
+    size: dp(0), dp(0)
+    pos: dp(0), dp(0)
+    opacity: 0
+
+<ThiefBoxes@Image>:
+    source: ''
+    size_hint: None, None
+    allow_stretch: True
+    size: dp(0), dp(0)
+    pos: dp(0), dp(0)
+    keep_ratio: False
+    opacity: 0
+
+<BrainButtons@ToggleButton>:
+    size_hint: None, None
+    size: dp(0), dp(0)
+    pos: dp(0), dp(0)
+    opacity: 0
+    disabled: True
+    background_normal: ''
+    canvas.after:
+        Color:
+            rgba: self.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<Progress@ProgressBar>:
+    canvas:
+        Color:
+            rgb: 1, 1, 1
+        BorderImage:
+            border: (8, 8, 8, 8)
+            pos: self.x, self.center_y - 8
+            size: self.width, 16
+            source: 'images/white-gray.png'
+        BorderImage:
+            id: brd
+            border: [int(min(self.width * (self.value / float(self.max)) if self.max else 0, 8))] * 4
+            pos: self.x, self.center_y - 8
+            size: self.width * (self.value / float(self.max)) if self.max else 0, 16
+            source: 'images/red.png' if self.value < 100 else 'images/green.png'
+
+<GameWindow>:
+    Shop:
+        id: f_shop
+    MovePlayers:
+        id: f_move
+    PlayerOne:
+        id: p1
+    PlayerTwo:
+        id: p2
+    Board:
+        id: board
+    TaxField:
+        id: f_tax
+    MoveField:
+        id: f_move_field
+    PointsField:
+        id: f_points
+    BigBenField:
+        id: f_big_ben
+    CryptoField:
+        id: f_crypto
+    ThiefField:
+        id: f_thief
+    ChanceField:
+        id: f_chance
+    EiffelTowerField:
+        id: f_eiffel
+    BrainMemoryField:
+        id: f_brain
+    DuckField:
+        id: f_duck
+    HospitalField:
+        id: f_hospital
+    ColiseumField:
+        id: f_coliseum
+    StickyField:
+        id: f_sticky
+    MathsField:
+        id: f_maths
+    CounterfeitCashField:
+        id: f_counterfeit
+    PisaField:
+        id: f_pisa
+    StarPointsField:
+        id: f_star_points
+    MoveBackField:
+        id: f_move_back
+    WinCashField:
+        id: f_win_cash
+    SydneyField:
+        id: f_sydney
+    BlackFridayField:
+        id: f_black_friday
+    CardsWarField:
+        id: f_cards_war
+    ChancePointsField:
+        id: f_chance_points
+    SkipDangerField:
+        id: f_skip_danger
+    OpTowers:
+        id: f_towers
+    SalaryBuilding:
+        id: f_salary_building
+    LouvreField:
+        id: f_louvre
+
+    FloatLayout:
+
+<Shop>:
+    CustomLabel:
+        id: shop_inventory_background
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+
+    ActionButtons:
+        id: player_1_shop_inventory
+        disabled: False
+        size: dp(160), dp(30)
+        pos: dp(15), dp(400)
+        background_color: (1,1,1,1)
+        opacity: 1
+        on_press: root.show_main()
+
+        Image:
+            id: player_1_shop_inventory_image
+            source: "images/inventory.png"
+            keep_ratio: False
+            allow_stretch: True
+            size_hint: None, None
+            size: dp(158), dp(110)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 1
+
+    ActionButtons:
+        id: player_2_shop_inventory
+        disabled: False
+        size: dp(160), dp(30)
+        pos: dp(1155), dp(400)
+        background_color: (1,1,1,1)
+        opacity: 1
+        on_press: root.show_main_2()
+
+        Image:
+            id: player_2_shop_inventory_image
+            source: "images/inventory.png"
+            keep_ratio: False
+            allow_stretch: True
+            size_hint: None, None
+            size: dp(158), dp(110)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 1
+
+    # Player 1
+
+    ActionButtons:
+        id: player_1_shop
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        background_color: (1,1,1,0)
+        on_press: root.shop_on_press()
+        on_release:
+            root.shop_on_release()
+            root.show_shop()
+
+        Image:
+            id: player_1_shop_image
+            source: "images/shop.png"
+            keep_ratio: False
+            allow_stretch: True
+            size_hint: None, None
+            size: dp(0), dp(0)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 0
+
+    ActionButtons:
+        id: player_1_inventory
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        background_color: (1,1,1,0)
+        on_press: root.inventory_on_press()
+        on_release:
+            root.inventory_on_release()
+            root.show_inventory()
+
+        Image:
+            id: player_1_inventory_image
+            source: "images/inventory_button.png"
+            keep_ratio: False
+            allow_stretch: True
+            size_hint: None, None
+            size: dp(0), dp(0)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 0
+
+    # Player 2
+
+    ActionButtons:
+        id: player_2_shop
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        background_color: (1,1,1,0)
+        on_press: root.shop_on_press()
+        on_release:
+            root.shop_on_release()
+            root.show_shop_2()
+
+        Image:
+            id: player_2_shop_image
+            source: "images/shop.png"
+            keep_ratio: False
+            allow_stretch: True
+            size_hint: None, None
+            size: dp(0), dp(0)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 0
+
+    ActionButtons:
+        id: player_2_inventory
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        background_color: (1,1,1,0)
+        on_press: root.inventory_on_press()
+        on_release:
+            root.inventory_on_release()
+            root.show_inventory_2()
+
+        Image:
+            id: player_2_inventory_image
+            source: "images/inventory_button.png"
+            keep_ratio: False
+            allow_stretch: True
+            size_hint: None, None
+            size: dp(0), dp(0)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 0
+
+    # Player 1 - Building Upgrades
+
+    CustomLabel:
+        id: building_upgrades
+        text: "Building Blueprints"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color:(1,1,0,1)
+        outline_width: 2
+        outline_color: (0,0,1)
+        font_size: 20
+        font_name: "fonts/No Virus.otf"
+
+    # Player 1 - Big Ben
+
+    CustomLabel:
+        id: big_ben_label
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: big_ben_upgrade
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.big_ben_upgrade()
+
+    CustomLabel:
+        id: big_ben_count
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: big_ben_count_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    Image:
+        id: big_ben_shop_image
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        source: 'images/bigben.png'
+        keep_ratio: False
+        allow_stretch: True
+
+    # Player 1 - Eiffel Tower
+
+    CustomLabel:
+        id: eiffel_label
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: eiffel_upgrade
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.eiffel_upgrade()
+
+    CustomLabel:
+        id: eiffel_count
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: eiffel_count_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    Image:
+        id: eiffel_shop_image
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        source: 'images/latour.png'
+        keep_ratio: False
+        allow_stretch: True
+
+    # Player 1 - Coliseum
+
+    CustomLabel:
+        id: coliseum_label
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: coliseum_upgrade
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.coliseum_upgrade()
+
+    CustomLabel:
+        id: coliseum_count
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: coliseum_count_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    Image:
+        id: coliseum_shop_image
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        source: 'images/coliseum.png'
+        keep_ratio: False
+        allow_stretch: True
+
+    # Player 1 - Pisa Tower
+
+    CustomLabel:
+        id: pisa_label
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: pisa_upgrade
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.pisa_upgrade()
+
+    CustomLabel:
+        id: pisa_count
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: pisa_count_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    Image:
+        id: pisa_shop_image
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        source: 'images/pisa.png'
+        keep_ratio: False
+        allow_stretch: True
+
+    # Player 1 - Sydney Opera
+
+    CustomLabel:
+        id: sydney_label
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: sydney_upgrade
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.sydney_upgrade()
+
+    CustomLabel:
+        id: sydney_count
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: sydney_count_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    Image:
+        id: sydney_shop_image
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        source: 'images/sydney.png'
+        keep_ratio: False
+        allow_stretch: True
+
+    # Player 1 - Louvre Field
+
+    CustomLabel:
+        id: louvre_label
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: louvre_upgrade
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.le_louvre_upgrade()
+
+    CustomLabel:
+        id: louvre_count
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: louvre_count_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    Image:
+        id: louvre_shop_image
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        source: 'images/louvre.png'
+        keep_ratio: False
+        allow_stretch: True
+
+    # Player 1 - Defensive Cards
+
+    CustomLabel:
+        id: anti_field_cards
+        text: "Defensive Cards"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        font_size: 20
+        background_color: (0,0,0,1)
+        color:(1,1,0,1)
+        outline_width: 2
+        outline_color: (0,0,1)
+        font_name: "fonts/No Virus.otf"
+
+    Image:
+        id: anti_thief_image
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        source: 'images/anti_steal.png'
+
+    Image:
+        id: anti_thief_active
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        source: 'images/anti_steal.png'
+
+    CustomLabel:
+        id: anti_steal_label
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    CustomLabel:
+        id: anti_steal_count
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    Button:
+        id: anti_thief_buy
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.anti_thief_buy()
+
+    # Player 1 - Offensive Cards
+
+    CustomLabel:
+        id: attack_others
+        text: "Offensive Cards"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        font_size: 20
+        background_color: (0,0,0,1)
+        color:(1,1,0,1)
+        outline_width: 2
+        outline_color: (0,0,1)
+        font_name: "fonts/No Virus.otf"
+
+    ActionButtons:
+        id: shop_main_exit
+        text: "Exit"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        on_press: root.main_exit()
+
+    # Player 2 - Building Upgrades
+
+    # Player 2 - Big Ben
+
+    CustomLabel:
+        id: big_ben_label_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: big_ben_upgrade_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.big_ben_upgrade_2()
+
+    CustomLabel:
+        id: big_ben_count_22
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: big_ben_count_2_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    # Player 2 - Eiffel Tower
+
+    CustomLabel:
+        id: eiffel_label_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: eiffel_upgrade_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.eiffel_upgrade_2()
+
+    CustomLabel:
+        id: eiffel_count_22
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: eiffel_count_2_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    # Player 2 - Coliseum
+
+    CustomLabel:
+        id: coliseum_label_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: coliseum_upgrade_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.coliseum_upgrade_2()
+
+    CustomLabel:
+        id: coliseum_count_22
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: coliseum_count_2_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    # Player 2 - Pisa Tower
+
+    CustomLabel:
+        id: pisa_label_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: pisa_upgrade_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.pisa_upgrade_2()
+
+    CustomLabel:
+        id: pisa_count_22
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: pisa_count_2_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    # Player 2 - Sydney Opera
+
+    CustomLabel:
+        id: sydney_label_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: sydney_upgrade_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.sydney_upgrade_2()
+
+    CustomLabel:
+        id: sydney_count_22
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: sydney_count_2_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    # Player 2 - Louvre Field
+
+    CustomLabel:
+        id: louvre_label_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    Button:
+        id: louvre_upgrade_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.le_louvre_upgrade_2()
+
+    CustomLabel:
+        id: louvre_count_22
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: louvre_count_2_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    # Player 2 - Defensive Cards
+
+    Image:
+        id: anti_thief_active_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        source: 'images/anti_steal.png'
+
+    CustomLabel:
+        id: anti_steal_label_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_name: "fonts/No Virus.otf"
+
+    CustomLabel:
+        id: anti_steal_count_2
+        text: "0"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    Button:
+        id: anti_thief_buy_2
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 15
+        disabled: True
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+        background_color:(0,0,0,1)
+        background_normal: ''
+        color:(0,1,0,1)
+        on_press: root.anti_thief_buy_2()
+
+    ActionButtons:
+        id: shop_main_exit_2
+        text: "Exit"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        on_press: root.main_exit_2()
+
+<ThiefField>:
+
+    # Player 1 Widgets
+
+    ThiefButtons:
+        id: thief_butt1
+        text: "1"
+        on_press: root.player_1_thief_option_1()
+
+    ThiefButtons:
+        id: thief_butt2
+        text: "2"
+        on_press: root.player_1_thief_option_2()
+
+    ThiefButtons:
+        id: thief_butt3
+        text: "3"
+        on_press: root.player_1_thief_option_3()
+
+    # Player 2 Widgets
+
+    ThiefButtons:
+        id: thief_butt4
+        text: "1"
+        on_press: root.player_2_thief_option_1()
+
+    ThiefButtons:
+        id: thief_butt5
+        text: "2"
+        on_press: root.player_2_thief_option_2()
+
+    ThiefButtons:
+        id: thief_butt6
+        text: "3"
+        on_press: root.player_2_thief_option_3()
+
+    # Both Players - Widgets
+
+    ThiefBoxes:
+        id: thief_box1
+
+    ThiefBoxes:
+        id: thief_box2
+
+    ThiefBoxes:
+        id: thief_box3
+
+<HospitalField>:
+    ThiefButtons:
+        id: hospital_butt_1
+        background_normal: ''
+        outline_color: (0, 0, 0)
+        outline_width: 2
+        font_name: "fonts/aAlloyInk.ttf"
+        on_press: root.player_1_butt_1()
+
+    ThiefButtons:
+        id: hospital_butt_2
+        background_normal: ''
+        outline_color: (0, 0, 0)
+        outline_width: 2
+        font_name: "fonts/aAlloyInk.ttf"
+        on_press: root.player_1_butt_2()
+
+    ThiefButtons:
+        id: hospital_butt_3
+        background_normal: ''
+        outline_color: (0, 0, 0)
+        outline_width: 2
+        font_name: "fonts/aAlloyInk.ttf"
+        on_press: root.player_2_butt_1()
+
+    ThiefButtons:
+        id: hospital_butt_4
+        background_normal: ''
+        outline_color: (0, 0, 0)
+        outline_width: 2
+        font_name: "fonts/aAlloyInk.ttf"
+        on_press: root.player_2_butt_2()
+
+<MathsField>:
+    ThiefButtons:
+        id: math_butt_1
+        background_normal: ''
+        background_color: (0,0,1,1)
+        color: (1,1,0,1)
+        outline_color: (0,0,0)
+        outline_width: 3
+        font_size: 40
+        font_name: "fonts/aAlloyInk.ttf"
+        on_press: root.math_butt_1()
+
+    ThiefButtons:
+        id: math_butt_2
+        background_normal: ''
+        background_color: (0,0,1,1)
+        color: (1,1,0,1)
+        outline_color: (0,0,0)
+        outline_width: 3
+        font_size: 40
+        font_name: "fonts/aAlloyInk.ttf"
+        on_press: root.math_butt_2()
+
+    ThiefButtons:
+        id: math_butt_3
+        background_normal: ''
+        background_color: (0,0,1,1)
+        color: (1,1,0,1)
+        outline_color: (0,0,0)
+        outline_width: 3
+        font_size: 40
+        font_name: "fonts/aAlloyInk.ttf"
+        on_press: root.math_butt_3()
+
+    ThiefButtons:
+        id: math_butt_4
+        background_normal: ''
+        background_color: (0,0,1,1)
+        color: (1,1,0,1)
+        outline_color: (0,0,0)
+        outline_width: 3
+        font_size: 40
+        font_name: "fonts/aAlloyInk.ttf"
+        on_press: root.math_butt_4()
+
+<CounterfeitCashField>:
+    Progress:
+        id: ccf_progress
+        min: 0
+        max: 100
+        value: 0
+        size_hint: None, None
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: ccf_progress_label
+        text: "0 %"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 17
+        color: (0,1,0,1)
+        halign: "left"
+        background_color: (0,0,0,1)
+        opacity: 0
+        font_name: "fonts/aAlloyInk.ttf"
+
+    Button:
+        id: ccf_claim
+        disabled: True
+        text: "Claim"
+        size_hint: None, None
+        background_color: (0,0,0,0)
+        color: (0,0,0,1)
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        outline_width: 3
+        outline_color: (1,1,1,1)
+        font_name: "fonts/aAlloyInk.ttf"
+        opacity: 0
+        on_press: root.ccf_claim()
+        on_release: root.ccf_pressed()
+
+
+    Image:
+        id: ccf_image
+        source: 'images/fake_cash.png'
+        size_hint: None, None
+        allow_stretch: True
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        keep_ratio: False
+        opacity: 0
+
+    Image:
+        id: ccf_point
+        source: 'images/claim_point_2.png'
+        size_hint: None, None
+        allow_stretch: True
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        keep_ratio: False
+        opacity: 0
+
+<StarPointsField>:
+    Progress:
+        id: fs_progress
+        min: 0
+        max: 100
+        value: 0
+        size_hint: None, None
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: fs_progress_label
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 17
+        color: (0,1,0,1)
+        halign: "left"
+        background_color: (0,0,0,1)
+        opacity: 0
+        font_name: "fonts/aAlloyInk.ttf"
+
+    Button:
+        id: fs_claim
+        disabled: True
+        text: "Claim"
+        size_hint: None, None
+        background_color: (0,0,0,0)
+        color: (0,0,0,1)
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        outline_width: 3
+        outline_color: (1,1,1,1)
+        font_name: "fonts/aAlloyInk.ttf"
+        opacity: 0
+        on_press: root.fs_claim()
+        on_release: root.fs_pressed()
+
+
+    Image:
+        id: fs_image
+        source: 'images/star_points.png'
+        size_hint: None, None
+        allow_stretch: True
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        keep_ratio: False
+        opacity: 0
+
+    Image:
+        id: fs_point
+        source: 'images/claim_point.png'
+        size_hint: None, None
+        allow_stretch: True
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        keep_ratio: False
+        opacity: 0
+
+<CardsWarField>:
+    Image:
+        id: player_1_card
+        source: "card_deck/card_back.png"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: card_label
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        font_size: 30
+        opacity: 0
+        font_name: "fonts/No Virus.otf"
+
+    CustomLabel:
+        id: player_1_card_score
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        outline_color: (0,0,0)
+        outline_width: 2
+        opacity: 0
+        font_name: "fonts/aAlloyInk.ttf"
+        font_size: 30
+
+    Image:
+        id: player_2_card
+        source: "card_deck/card_back.png"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    CustomLabel:
+        id: player_2_card_score
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        background_color: (0,0,0,1)
+        color: (1,1,1,1)
+        outline_color: (0,0,0)
+        outline_width: 2
+        opacity: 0
+        font_name: "fonts/aAlloyInk.ttf"
+        font_size: 30
+
+    Button:
+        id: player_1_draw
+        disabled: True
+        text: "Draw"
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        opacity: 0
+        on_press: root.draw_cards()
+
+<BrainMemoryField>:
+    BrainButtons:
+        id: brain_1
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_2
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_3
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_4
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_5
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_6
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_7
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_8
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_9
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_10
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_11
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_12
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_13
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_14
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_15
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_16
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_17
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_18
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_19
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_20
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_21
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_22
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_23
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_24
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_25
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_26
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_27
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_28
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_29
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_30
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_31
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_32
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_33
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_34
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_35
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_36
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_37
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_38
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_39
+        on_press: root.on_press_button_color()
+
+    BrainButtons:
+        id: brain_40
+        on_press: root.on_press_button_color()
+
+<PlayerOne>:
+
+    CustomLabel:
+        id: player_1
+        size: dp(15), dp(15)
+        pos: dp(990), dp(458)
+        background_color:(247/255,7/255,223/255,1)
+
+    # Player 1 - ScoreBoard
+    CustomLabel:
+        id: scoreboard_background
+        size: dp(157), dp(210)
+        pos: dp(17), dp(453)
+        background_color: (1,1,1,1)
+
+    CustomLabel:
+        id: nickname
+        text: "Player 1"
+        size: dp(151), dp(50)
+        pos: dp(20), dp(610)
+        background_color: (0,0,0,1)
+        color:(1,1,1,1)
+
+    CustomLabel:
+        id: cash
+        size: dp(50), dp(50)
+        pos: dp(20), dp(559)
+        canvas.before:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'images/cash.png'
+
+    CustomLabel:
+        id: player_1_money
+        size: dp(100), dp(50)
+        pos: dp(71), dp(559)
+        font_size: 25
+        background_color: (0,0,0,1)
+        color:(0,1,0,1)
+        font_name: "fonts/aAlloyInk.ttf"
+
+    CustomLabel:
+        id: p1_money_stash
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+
+    CustomLabel:
+        id: point
+        size: dp(50), dp(50)
+        pos: dp(20), dp(508)
+        canvas.before:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'images/star.png'
+
+    CustomLabel:
+        id: player_1_points
+        size: dp(100), dp(50)
+        pos: dp(71), dp(508)
+        font_size: 20
+        background_color: (0,0,0,1)
+        color: (233/255,245/255,5/255,1)
+        font_name: "fonts/aAlloyInk.ttf"
+
+    CustomLabel:
+        id: p1_points_stash
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+
+    CustomLabel:
+        id: crypto
+        size: dp(50), dp(50)
+        pos: dp(20), dp(457)
+        canvas.before:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'images/btc.png'
+
+    CustomLabel:
+        id: p1_crypto
+        size: dp(100), dp(50)
+        pos: dp(71), dp(457)
+        font_size: 22
+        background_color: (0,0,0,1)
+        color:(13/255,5/255,245/255,1)
+        font_name: "fonts/aAlloyInk.ttf"
+
+    CustomLabel:
+        id: p1_crypto_stash
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+
+    CustomLabel:
+        id: p1_crypto_percent
+        size: dp(100), dp(50)
+        pos: dp(175), dp(457)
+        background_color: (0,0,0,1)
+        font_size: 25
+        font_name: "fonts/aAlloyInk.ttf"
+        canvas.before:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+    TextInputs:
+        id: p1_input
+        pos: dp(17), dp(250)
+        on_focus: root.cancel()
+
+    CheckBox:
+        id: turn_1
+        disabled: True
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    # Player 1 - Action Buttons
+
+    ActionButtons:
+        id: player_1_roll
+        text: 'Roll'
+        size: dp(200), dp(40)
+        pos: dp(330), dp(80)
+        opacity: 1
+        on_press:
+            root.roll()
+            root.block_roll()
+
+    ActionButtons:
+        id: player_1_yes
+        pos: dp(15), dp(350)
+        size: dp(30), dp(35)
+        background_color: (0,0,0,0)
+        on_press:
+            root.yes_button()
+            root.yes_button_image_on()
+        on_release: root.yes_button_image_off()
+
+        Image:
+            id: yes_button_image
+            source: "images/yes_button.png"
+            size_hint: None, None
+            size: dp(40), dp(40)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 0
+
+    ActionButtons:
+        id: player_1_no
+        pos: dp(72), dp(348)
+        size: dp(30), dp(35)
+        background_color: (0,0,0,0)
+        on_press:
+            root.no_button()
+            root.no_button_image_on()
+        on_release: root.no_button_image_off()
+
+        Image:
+            id: no_button_image
+            source: "images/no_button.png"
+            size_hint: None, None
+            size: dp(48), dp(48)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 0
+
+    ActionButtons:
+        id: p1_sell_crypto
+        pos: dp(130), dp(348)
+        size: dp(30), dp(35)
+        background_color: (0,0,0,0)
+        on_press:
+            root.sell_crypto()
+            root.crypto_button_image_on()
+        on_release: root.crypto_button_image_off()
+
+        Image:
+            id: crypto_button_image
+            source: "images/btc.png"
+            size_hint: None, None
+            size: dp(40), dp(40)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 0
+
+<PlayerTwo>:
+
+    CustomLabel:
+        id: player_2
+        size: dp(15), dp(15)
+        pos: dp(990), dp(440)
+        background_color:(0,1,0,1)
+
+    # Player 2 - ScoreBoard
+
+    CustomLabel:
+        id: scoreboard_background_2
+        size: dp(157), dp(210)
+        pos: dp(1156), dp(453)
+        background_color: (1,1,1,1)
+
+    CustomLabel:
+        id: nickname_2
+        text: "Player 2"
+        size: dp(151), dp(50)
+        pos: dp(1159), dp(610)
+        background_color: (0,0,0,1)
+        color:(1,1,1,1)
+
+    CustomLabel:
+        id: cash_2
+        size: dp(50), dp(50)
+        pos: dp(1159), dp(559)
+        canvas.before:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'images/cash.png'
+
+    CustomLabel:
+        id: player_2_money
+        size: dp(100), dp(50)
+        pos: dp(1210), dp(559)
+        halign: 'center'
+        font_size: 25
+        background_color: (0,0,0,1)
+        color:(0,1,0,1)
+        font_name: "fonts/aAlloyInk.ttf"
+
+    CustomLabel:
+        id: p2_money_stash
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+
+    CustomLabel:
+        id: point_2
+        size: dp(50), dp(50)
+        pos: dp(1159), dp(508)
+        canvas.before:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'images/star.png'
+
+    CustomLabel:
+        id: player_2_points
+        size: dp(100), dp(50)
+        pos: dp(1210), dp(508)
+        font_size: 20
+        background_color:(0,0,0,1)
+        color: (233/255,245/255,5/255,1)
+        font_name: "fonts/aAlloyInk.ttf"
+
+    CustomLabel:
+        id: p2_points_stash
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+
+    CustomLabel:
+        id: crypto_2
+        size: dp(50), dp(50)
+        pos: dp(1159), dp(457)
+        canvas.before:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'images/btc.png'
+
+    CustomLabel:
+        id: p2_crypto
+        size: dp(100), dp(50)
+        pos: dp(1210), dp(457)
+        font_size: 22
+        background_color: (0,0,0,1)
+        color:(13/255,5/255,245/255,1)
+        font_name: "fonts/aAlloyInk.ttf"
+
+    CustomLabel:
+        id: p2_crypto_stash
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+
+    CustomLabel:
+        id: p2_crypto_percent
+        size: dp(100), dp(50)
+        pos: dp(1055), dp(457)
+        background_color: (0,0,0,1)
+        font_size: 25
+        font_name: "fonts/aAlloyInk.ttf"
+        canvas.before:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+    TextInputs:
+        id: p2_input
+        pos: dp(1156), dp(250)
+        on_focus: root.cancel()
+
+    CheckBox:
+        id: turn_2
+        disabled: True
+        pos: dp(0), dp(0)
+        opacity: 0
+
+    # Player 2 - Action Buttons
+
+    ActionButtons:
+        id: player_2_roll
+        text: 'Roll'
+        size: dp(200), dp(40)
+        pos: dp(785), dp(80)
+        on_press:
+            root.roll()
+            root.block_roll()
+
+    ActionButtons:
+        id: player_2_yes
+        pos: dp(1156), dp(350)
+        size: dp(30), dp(35)
+        background_color: (0,0,0,0)
+        on_press:
+            root.yes_button()
+            root.yes_button_image_on()
+        on_release: root.yes_button_image_off()
+
+        Image:
+            id: yes_button_image
+            source: "images/yes_button.png"
+            size_hint: None, None
+            size: dp(40), dp(40)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 0
+
+    ActionButtons:
+        id: player_2_no
+        pos: dp(1213), dp(348)
+        size: dp(30), dp(35)
+        background_color: (0,0,0,0)
+        on_press:
+            root.no_button()
+            root.no_button_image_on()
+        on_release: root.no_button_image_off()
+
+        Image:
+            id: no_button_image
+            source: "images/no_button.png"
+            size_hint: None, None
+            size: dp(48), dp(48)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 0
+
+    ActionButtons:
+        id: p2_sell_crypto
+        pos: dp(1271), dp(348)
+        size: dp(30), dp(35)
+        background_color: (0,0,0,0)
+        on_press:
+            root.sell_crypto()
+            root.crypto_button_image_on()
+        on_release: root.crypto_button_image_off()
+
+        Image:
+            id: crypto_button_image
+            source: "images/btc.png"
+            size_hint: None, None
+            size: dp(40), dp(40)
+            center_x: self.parent.center_x
+            center_y:self.parent.center_y
+            opacity: 0
+
+<Board>:
+
+    # General Widgets and Labels
+
+    CustomLabel:
+        id: big
+        font_size: 35
+        opacity: 1
+        color:(140/255,0,1,1)
+        outline_width: 4
+        outline_color: (0,0,0)
+        size: dp(545), dp(270)
+        pos: dp(385), dp(203)
+        font_name: "fonts/No Virus.otf"
+        markup: True
+        canvas.before:
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                source: 'images/background.png'
+
+    CustomLabel:
+        id: dice
+        font_size: 33
+        color:(7/255,215/255,247/255,1)
+        background_color:(100/255,100/255,100/255,1)
+        size: dp(50), dp(39)
+        pos: dp(0), dp(0)
+        font_name: "fonts/aAlloyInk.ttf"
+
+    CustomLabel:
+        id: cash_count
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        background_color: (0,0,0,1)
+        opacity: 0
+        font_name: "fonts/aAlloyInk.ttf"
+
+    CustomLabel:
+        id: points_count
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        background_color: (0,0,0,1)
+        font_name: "fonts/aAlloyInk.ttf"
+
+    CustomLabel:
+        id: crypto_count
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        background_color: (0,0,0,1)
+        font_name: "fonts/aAlloyInk.ttf"
+
+    Button:
+        id: start
+        text: 'Start Game'
+        size_hint: None, None
+        size: dp(150), dp(40)
+        pos: dp(500), dp(25)
+        on_release: root.load_game()
+
+    Button:
+        id: restart
+        text: 'Restart'
+        size_hint: None, None
+        size: dp(150), dp(40)
+        pos: dp(660), dp(25)
+        on_release:
+            root.restart_game()
+
+    # All the Game Fields
+
+    Fields:
+        id: field_1
+        pos: dp(935), dp(423)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(936), dp(424)
+                source: 'images/start.png'
+
+    Fields:
+        id: field_2
+        pos: dp(935), dp(368)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(936), dp(369)
+                source: 'images/tax.png'
+
+    Fields:
+        id: field_3
+        pos: dp(935), dp(313)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(936), dp(314)
+                source: 'images/points.png'
+
+    Fields:
+        id: field_4
+        pos: dp(935), dp(258)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(936), dp(259)
+                source: 'images/fo.png'
+
+    Fields:
+        id: field_5
+        font_size: 0
+        pos: dp(935), dp(203)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(936), dp(204)
+                source: 'images/bigben.png'
+
+    Fields:
+        id: field_6
+        pos: dp(935), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(936), dp(149)
+                source: 'images/crypto.png'
+
+    Fields:
+        id: field_7
+        pos: dp(880), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(881), dp(149)
+                source: 'images/steal.png'
+
+    Fields:
+        id: field_8
+        pos: dp(825), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(826), dp(149)
+                source: 'images/question_mark.png'
+
+    Fields:
+        id: field_9
+        font_size: 0
+        pos: dp(770), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(771), dp(149)
+                source: 'images/latour.png'
+
+    Fields:
+        id: field_10
+        pos: dp(715), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(716), dp(149)
+                source: 'images/brain.png'
+
+    Fields:
+        id: field_11
+        font_size: 0
+        pos: dp(660), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(661), dp(149)
+                source: 'images/duck.png'
+
+    Fields:
+        id: field_12
+        pos: dp(605), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(606), dp(149)
+                source: 'images/hospital.png'
+
+    Fields:
+        id: field_13
+        font_size: 0
+        pos: dp(550), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(551), dp(149)
+                source: 'images/coliseum.png'
+
+    Fields:
+        id: field_14
+        pos: dp(495), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(496), dp(149)
+                source: 'images/floor.png'
+
+    Fields:
+        id: field_15
+        pos: dp(440), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(441), dp(149)
+                source: 'images/math.png'
+
+    Fields:
+        id: field_16
+        font_size: 0
+        pos: dp(385), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(386), dp(149)
+                source: 'images/fake_cash.png'
+
+    Fields:
+        id: field_17
+        font_size: 0
+        pos: dp(330), dp(148)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(331), dp(149)
+                source: 'images/pisa.png'
+
+    Fields:
+        id: field_18
+        pos: dp(330), dp(203)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(331), dp(204)
+                source: 'images/tax.png'
+
+    Fields:
+        id: field_19
+        font_size: 0
+        pos: dp(330), dp(258)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(331), dp(259)
+                source: 'images/star_points.png'
+
+    Fields:
+        id: field_20
+        pos: dp(330), dp(313)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(331), dp(314)
+                source: 'images/back_arrow.png'
+
+    Fields:
+        id: field_21
+        pos: dp(330), dp(368)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(331), dp(369)
+                source: 'images/win_cash.png'
+
+    Fields:
+        id: field_22
+        font_size: 0
+        pos: dp(330), dp(423)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(331), dp(424)
+                source: 'images/sydney.png'
+
+    Fields:
+        id: field_23
+        pos: dp(330), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(331), dp(479)
+                source: 'images/black_friday.png'
+
+    Fields:
+        id: field_24
+        pos: dp(385), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(386), dp(479)
+                source: 'images/cards_war.png'
+
+    Fields:
+        id: field_25
+        pos: dp(440), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(441), dp(479)
+                source: 'images/exclamation_mark.png'
+
+    Fields:
+        id: field_26
+        pos: dp(495), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(496), dp(479)
+                source: 'images/skip_danger.png'
+
+    Fields:
+        id: field_27
+        font_size: 0
+        pos: dp(550), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(551), dp(479)
+                source: 'images/tower_1.png'
+
+    Fields:
+        id: field_28
+        pos: dp(605), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(606), dp(479)
+                source: 'images/brain.png'
+
+    Fields:
+        id: field_29
+        font_size: 0
+        pos: dp(660), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(661), dp(479)
+                source: 'images/tower_2.png'
+
+    Fields:
+        id: field_30
+        font_size: 0
+        pos: dp(715), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(716), dp(479)
+                source: 'images/duck.png'
+
+    Fields:
+        id: field_31
+        font_size: 0
+        pos: dp(770), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(771), dp(479)
+                source: 'images/tower_3.png'
+
+    Fields:
+        id: field_32
+        font_size: 0
+        pos: dp(825), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(826), dp(479)
+                source: 'images/salary.png'
+
+    Fields:
+        id: field_33
+        font_size: 0
+        pos: dp(880), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(881), dp(479)
+                source: 'images/louvre.png'
+
+    Fields:
+        id: field_34
+        font_size: 0
+        pos: dp(935), dp(478)
+        canvas.before:
+            Rectangle:
+                size: dp(48), dp(48)
+                pos: dp(936), dp(479)
+                source: 'images/salary.png'
+
+    CustomLabel:
+        id: count_down
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 25
+        background_color: (0,0,0,0)
+        outline_width: 3
+        outline_color: (0,0,0)
+        color:(0,1,0,1)
+        opacity:0
+        font_name: "fonts/aAlloyInk.ttf"
+
+    CustomLabel:
+        id: maths_count_down
+        size: dp(0), dp(0)
+        pos: dp(0), dp(0)
+        font_size: 25
+        background_color: (0,0,0,0)
+        outline_width: 3
+        outline_color: (0,0,0)
+        color:(0,1,0,1)
+        opacity:0
+        font_name: "fonts/aAlloyInk.ttf"
